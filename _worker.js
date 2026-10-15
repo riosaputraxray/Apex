@@ -1,4 +1,3 @@
-import worker from './worker.js';
 const ipCache = new Map();
 const banCache = new Map();
 const MY_SECRET_KEY = 'mozarivalda123';
@@ -15,7 +14,7 @@ export default {
     if (isMe) {
       url.searchParams.delete('key');
       const newReq = new Request(url.toString(), request);
-      const res = await worker.fetch(newReq, env, ctx);
+      const res = await env.ASSETS.fetch(newReq);
       const newRes = new Response(res.body, res);
       newRes.headers.set('Set-Cookie', `auth=${MY_SECRET_KEY}; Path=/; Max-Age=86400`);
       return newRes;
@@ -44,6 +43,6 @@ export default {
       }
     }
 
-    return worker.fetch(request, env, ctx);
+    return env.ASSETS.fetch(request);
   }
 }
